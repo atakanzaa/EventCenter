@@ -21,6 +21,9 @@ public class UserService {
     }
 
     public User createUser(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email zaten mevcut");
+        }
         return userRepository.save(user);
     }
 

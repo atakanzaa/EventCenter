@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    boolean existsByEmail(String email);
     // Kullanıcıya özel sorgular burada tanımlanabilir, örneğin:
     // Optional<User> findByEmail(String email);
 }
