@@ -9,7 +9,7 @@ CREATE TABLE users (
                        role VARCHAR(20) NOT NULL,
                        created_at TIMESTAMP,
                        profile_picture_url VARCHAR(255),
-                       birthdate DATE,
+                       birthDate DATE,
                        is_approved BOOLEAN DEFAULT false
 );
 

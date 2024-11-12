@@ -1,10 +1,9 @@
 package com.example.EventCenter.Entity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+
+@Data
 @Entity
 @Table(name = "event_categories")
 public class EventCategory {

@@ -1,11 +1,9 @@
-package com.example.EventCenter.DTO;
+package com.example.EventCenter.Dto;
+import lombok.Data;
 
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
-public class EventDTO {
+@Data
+public class EventDto {
     private Long eventId;
     private Long organizerId;
     private String title;
@@ -17,5 +15,4 @@ public class EventDTO {
     private Integer maxCapacity;
     private Integer minAge;
 
-    // Getter ve Setter'lar
 }

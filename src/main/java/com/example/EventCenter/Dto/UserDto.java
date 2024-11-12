@@ -1,11 +1,10 @@
-package com.example.EventCenter.DTO;
+package com.example.EventCenter.Dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-public class UserDTO {
+
+@Data
+public class UserDto {
     private Long userId;
     private String name;
     private String surname;
@@ -13,7 +12,7 @@ public class UserDTO {
     private String phoneNumber;
     private String role;
     private String profilePictureUrl;
-    private String birthdate;
+    private String birthDate;
     private Boolean isApproved;
 
     // Getter ve Setter'lar

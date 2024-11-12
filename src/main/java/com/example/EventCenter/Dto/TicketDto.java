@@ -1,11 +1,10 @@
-package com.example.EventCenter.DTO;
+package com.example.EventCenter.Dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-public class TicketDTO {
+
+@Data
+public class TicketDto {
     private Long ticketId;
     private Long eventId;
     private String ticketType;

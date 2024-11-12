@@ -1,12 +1,12 @@
 package com.example.EventCenter.Entity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-@Getter
-@Setter
+
+@Data
 @Entity
 @Table(name = "tickets")
 public class Ticket {

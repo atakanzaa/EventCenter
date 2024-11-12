@@ -1,12 +1,12 @@
 package com.example.EventCenter.Entity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "users")
 public class User {
@@ -27,8 +27,14 @@ public class User {
     private String role;
 
     private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
     private String profilePictureUrl;
-    private LocalDate birthdate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
+    private LocalDate birthDate;
 
     private Boolean isApproved = false;
 

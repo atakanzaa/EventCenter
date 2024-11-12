@@ -1,11 +1,9 @@
-package com.example.EventCenter.DTO;
+package com.example.EventCenter.Dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-public class NotificationDTO {
+@Data
+public class NotificationDto {
     private Long notificationId;
     private Long userId;
     private String message;
