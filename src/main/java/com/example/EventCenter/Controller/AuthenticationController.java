@@ -2,8 +2,6 @@ package com.example.EventCenter.Controller;
 
 
 import com.example.EventCenter.Dto.LoginRequestDto;
-import com.example.EventCenter.Entity.User;
-import com.example.EventCenter.JwtUtil;
 import com.example.EventCenter.Service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +17,6 @@ public class AuthenticationController {
 
     @Autowired
     private AuthenticationService authenticationService;
-    @Autowired
-    private JwtUtil jwtUtil;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest) {
@@ -32,6 +28,3 @@ public class AuthenticationController {
         }
     }
 }
-
-
-

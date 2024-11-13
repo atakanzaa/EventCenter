@@ -1,7 +1,9 @@
 package com.example.EventCenter.Service;
 
 import com.example.EventCenter.Dto.UserRegistrationDto;
+import com.example.EventCenter.Entity.Role;
 import com.example.EventCenter.Entity.User;
+import com.example.EventCenter.Repository.RoleRepository;
 import com.example.EventCenter.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,7 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -18,6 +23,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     private final PasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
+    @Autowired
+    private RoleRepository roleRepository;
 
 
     // Tüm kullanıcıları listeleyen metod
@@ -46,11 +53,16 @@ public class UserService {
         user.setPhoneNumber(userRegistrationDto.getPhoneNumber());
         //user.setRole(userRegistrationDto.getRole());
         user.setBirthDate(userRegistrationDto.getBirthDate());
-        user.setRole("USER");
         user.setCreatedAt(LocalDateTime.now());
 
-        return userRepository.save(user);
+        Role userRole = roleRepository.findByid(3L);
+
+        user.getRoles().add(userRole);
+        userRepository.save(user);
+        return user;
     }
+
+
 
     // Kullanıcıyı güncelleme metodunda şifreyi hash'leme
     public User updateUser(Long id, User userDetails) {
@@ -81,13 +93,15 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public User getCurrentUser() {
-        // SecurityContextHolder üzerinden oturum açmış kullanıcının email bilgisine ulaşıyoruz
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println("Authenticated user email: " + email);
+//    public User getCurrentUser() {
+//        // SecurityContextHolder üzerinden oturum açmış kullanıcının email bilgisine ulaşıyoruz
+//        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+//        System.out.println("Authenticated user email: " + email);
+//
+//        // email'i kullanarak kullanıcıyı veritabanından alıyoruz
+//        return userRepository.findByEmail(email);
+//    }
 
-        // email'i kullanarak kullanıcıyı veritabanından alıyoruz
-        return userRepository.findByEmail(email).orElse(null);
-    }
+
 
 }

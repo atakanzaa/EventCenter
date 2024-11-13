@@ -6,6 +6,9 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @Entity
 @Table(name = "users")
@@ -32,12 +35,20 @@ public class User {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
+
     private String profilePictureUrl;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate birthDate;
 
     private Boolean isApproved = false;
 
-    // Getters and Setters
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",  // user_roles tablosunu kullanacağız
+            joinColumns = @JoinColumn(name = "user_id"), // user_id sütunu
+            inverseJoinColumns = @JoinColumn(name = "role_id") // role_id sütunu
+    )
+    private Set<Role> roles = new HashSet<>();
 }
+
 
