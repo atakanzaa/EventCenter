@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api")
 public class AuthenticationController {
@@ -20,11 +23,14 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest) {
-        boolean isAuthenticated = authenticationService.authenticate(loginRequest);
-        if (isAuthenticated) {
-            return ResponseEntity.ok().body("Giriş başarılı");
+        String jwtToken = authenticationService.authenticate(loginRequest);
+        if (jwtToken != null) {
+            Map<String, String> response = new HashMap<>();
+            response.put("token", jwtToken);
+            return ResponseEntity.ok(response); // Token'i döndür
         } else {
             return ResponseEntity.status(401).body("Geçersiz e-posta veya parola");
         }
     }
 }
+

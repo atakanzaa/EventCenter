@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -15,10 +16,14 @@ public class AuthenticationService {
 
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public boolean authenticate(LoginRequestDto loginRequestDto) {
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    public String authenticate(LoginRequestDto loginRequestDto) {
         String email = loginRequestDto.getEmail();
         String password = loginRequestDto.getPassword();
 
@@ -27,9 +32,12 @@ public class AuthenticationService {
             User user = userOpt.get();
             String storedPasswordHash = user.getPassword();
 
-            return passwordEncoder.matches(password, storedPasswordHash);
+            if (passwordEncoder.matches(password, storedPasswordHash)) {
+                return jwtUtil.generateToken(email); // JWT token oluşturma
+            }
         }
-        return false;
+        return null;
     }
+
 }
 
