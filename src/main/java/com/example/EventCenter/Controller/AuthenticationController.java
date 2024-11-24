@@ -23,14 +23,13 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest) {
-        String jwtToken = authenticationService.authenticate(loginRequest);
-        if (jwtToken != null) {
-            Map<String, String> response = new HashMap<>();
-            response.put("token", jwtToken);
-            return ResponseEntity.ok(response); // Token'i döndür
+        Map<String, Object> authResult = authenticationService.authenticate(loginRequest);
+        if (authResult != null) {
+            return ResponseEntity.ok(authResult);
         } else {
             return ResponseEntity.status(401).body("Geçersiz e-posta veya parola");
         }
     }
 }
+
 

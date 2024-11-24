@@ -93,15 +93,5 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-//    public User getCurrentUser() {
-//        // SecurityContextHolder üzerinden oturum açmış kullanıcının email bilgisine ulaşıyoruz
-//        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-//        System.out.println("Authenticated user email: " + email);
-//
-//        // email'i kullanarak kullanıcıyı veritabanından alıyoruz
-//        return userRepository.findByEmail(email);
-//    }
-
-
 
 }

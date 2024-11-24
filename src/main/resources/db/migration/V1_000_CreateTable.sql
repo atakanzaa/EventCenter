@@ -19,7 +19,7 @@ CREATE TABLE events (
                         organizer_id INT REFERENCES users(user_id), -- Assuming organizers are also users
                         title VARCHAR(255) NOT NULL,
                         description TEXT,
-                        category VARCHAR(50),
+                        categoryName VARCHAR(50),
                         location VARCHAR(255),
                         event_date TIMESTAMP,
                         status VARCHAR(20) NOT NULL,
@@ -97,3 +97,13 @@ CREATE TABLE user_roles (
                             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
                             FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
 );
+
+CREATE TABLE event_category (
+                            event_id BIGINT NOT NULL,
+                            category_id BIGINT NOT NULL,
+                            PRIMARY KEY (event_id, category_id),
+                            FOREIGN KEY (event_id) REFERENCES  events(event_id) ON DELETE CASCADE,
+                            FOREIGN KEY (category_id) REFERENCES event_categories(category_id) ON DELETE CASCADE
+);
+
+

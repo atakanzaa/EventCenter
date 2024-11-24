@@ -1,39 +1,30 @@
 package com.example.EventCenter.Controller;
+import com.example.EventCenter.Dto.EventDetailsDto;
 import com.example.EventCenter.Entity.Event;
 import com.example.EventCenter.Service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/events")
+@RequestMapping("/api/events")
 public class EventController {
 
     @Autowired
     private EventService eventService;
 
     @GetMapping
-    public List<Event> getAllEvents() {
-        return eventService.getAllEvents();
+    public ResponseEntity<List<Event>> getAllEvents() {
+        List<Event> events = eventService.getAllEvents();
+        return ResponseEntity.ok(events);  // Spring automatically converts objects to JSON
     }
 
-    @GetMapping("/{id}")
-    public Event getEventById(@PathVariable Long id) {
-        return eventService.getEventById(id);
-    }
-
-    @PostMapping
-    public Event createEvent(@RequestBody Event event) {
-        return eventService.createEvent(event);
-    }
-
-    @PutMapping("/{id}")
-    public Event updateEvent(@PathVariable Long id, @RequestBody Event event) {
-        return eventService.updateEvent(id, event);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteEvent(@PathVariable Long id) {
-        eventService.deleteEvent(id);
+    @PostMapping("/create")
+    public ResponseEntity<Event> createEvent(@RequestBody EventDetailsDto eventDetailsDto) {
+        Event event = eventService.createEvent(eventDetailsDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(event);
     }
 }
