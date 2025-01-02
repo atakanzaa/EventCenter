@@ -1,5 +1,6 @@
 package com.example.EventCenter.Service;
 
+import com.example.EventCenter.Dto.UserDto;
 import com.example.EventCenter.Dto.UserRegistrationDto;
 import com.example.EventCenter.Entity.Role;
 import com.example.EventCenter.Entity.User;
@@ -7,6 +8,7 @@ import com.example.EventCenter.Repository.RoleRepository;
 import com.example.EventCenter.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,17 +28,14 @@ public class UserService {
     @Autowired
     private RoleRepository roleRepository;
 
-
-    // Tüm kullanıcıları listeleyen metod
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
-
-    // Kullanıcıyı ID'ye göre bulan metod
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public UserDto getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Kullanıcı bulunamadı: " + email));
+        return new UserDto(user.getName(), user.getSurname(), user.getEmail(), user.getPhoneNumber(), user.getBirthDate());
     }
-
 
     public User createUser(UserRegistrationDto userRegistrationDto) {
         // Aynı e-posta ile kayıtlı kullanıcı var mı kontrolü
@@ -60,37 +59,6 @@ public class UserService {
         user.getRoles().add(userRole);
         userRepository.save(user);
         return user;
-    }
-
-
-
-    // Kullanıcıyı güncelleme metodunda şifreyi hash'leme
-    public User updateUser(Long id, User userDetails) {
-        User user = userRepository.findById(id).orElse(null);
-
-        if (user != null) {
-            // Kullanıcı bilgilerini güncelliyoruz
-            user.setName(userDetails.getName());
-            user.setSurname(userDetails.getSurname());
-            user.setEmail(userDetails.getEmail());
-            user.setPhoneNumber(userDetails.getPhoneNumber());
-            user.setRole(userDetails.getRole());
-            user.setBirthDate(userDetails.getBirthDate());
-            user.setIsApproved(userDetails.getIsApproved());
-
-            // Eğer yeni şifre verilmişse, onu hash'liyoruz
-            if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
-                String encodedPassword = passwordEncoder.encode(userDetails.getPassword());
-                user.setPassword(encodedPassword);  // Hashlenmiş yeni şifreyi kullanıcıya atıyoruz
-            }
-
-            return userRepository.save(user);
-        }
-        return null;
-    }
-
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
     }
 
 

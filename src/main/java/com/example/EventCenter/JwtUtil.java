@@ -11,37 +11,30 @@ import java.util.Map;
 
 @Component
 public class JwtUtil {
-    private final String SECRET_KEY = "batu";
+        private final String SECRET_KEY = "secret"; // Güçlü bir secret key kullanın
+        private final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10 saat
 
-    public String generateToken(String email) {
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, email);
-    }
+        public String generateToken(String email) {
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("email", email); // Email'i payload'a ekliyoruz
+            return Jwts.builder()
+                    .setClaims(claims)
+                    .setSubject(email)
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                    .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                    .compact();
+        }
 
-    private String createToken(Map<String, Object> claims, String subject) {
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 saat geçerlilik süresi
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-                .compact();
-    }
+        public String extractEmail(String token) {
+            return extractClaim(token, "email");
+        }
 
-    public Boolean validateToken(String token, String email) {
-        final String username = extractEmail(token);
-        return (username.equals(email) && !isTokenExpired(token));
+        public <T> T extractClaim(String token, String claimName) {
+            return (T) Jwts.parser()
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .get(claimName);
+        }
     }
-
-    public String extractEmail(String token) {
-        return extractClaims(token).getSubject();
-    }
-
-    private Claims extractClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
-    }
-
-    private Boolean isTokenExpired(String token) {
-        return extractClaims(token).getExpiration().before(new Date());
-    }
-}

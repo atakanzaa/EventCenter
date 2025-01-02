@@ -19,7 +19,7 @@ public class CategoryController {
 
     @GetMapping("/categories")
     public List<Category> getCategories() {
-        return eventCategoryService.getAllCategories(); // Servisten kategorileri alıyoruz
+        return eventCategoryService.getAllCategories();
     }
     }
 

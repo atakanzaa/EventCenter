@@ -19,7 +19,7 @@ public class EventController {
     @GetMapping
     public ResponseEntity<List<Event>> getAllEvents() {
         List<Event> events = eventService.getAllEvents();
-        return ResponseEntity.ok(events);  // Spring automatically converts objects to JSON
+        return ResponseEntity.ok(events);
     }
 
     @PostMapping("/create")
